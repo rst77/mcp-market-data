@@ -16,7 +16,7 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
-        <mainClass>com.r13a.ext.mcp.Main</mainClass>
+        <mainClass>com.r13a.mcp.Main</mainClass>
     </properties>
 
     <dependencies>

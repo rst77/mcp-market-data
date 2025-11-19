@@ -1,4 +1,4 @@
-package com.r13a.ext.mcp;
+package com.r13a.mcp;
 
 import io.helidon.logging.common.LogConfig;
 import io.helidon.service.registry.Service;
