@@ -11,8 +11,8 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.r13a.ext.mcp</groupId>
-    <artifactId>mcp-external-data</artifactId>
+    <groupId>com.r13a.mcp</groupId>
+    <artifactId>mcp-market-data</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
@@ -57,7 +57,7 @@
     </dependencies>
 
     <build>
-        <finalName>mcp-external-data</finalName>
+        <finalName>mcp-market-data</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
