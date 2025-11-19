@@ -1,0 +1,1 @@
+[{"module":"unnamed/com.r13a.ext.mcp","services":[{"descriptor":"com.r13a.ext.mcp.McpServer__McpServer__ServiceDescriptor","contracts":["com.r13a.ext.mcp.McpServer__McpServer","io.helidon.webserver.http.HttpFeature","io.helidon.webserver.ServerLifecycle","java.util.function.Supplier<?>","java.util.function.Supplier<io.helidon.webserver.http.HttpFeature>"]}]}]
