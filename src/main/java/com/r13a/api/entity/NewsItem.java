@@ -1,4 +1,10 @@
 package com.r13a.api.entity;
 
-public record NewsItem(String title, String link, String description, String publicationDate) {
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+public record NewsItem(
+        String title,
+        String link,
+        String description,
+        @JacksonXmlProperty(localName = "pubDate") String publicationDate) {
 }

@@ -71,6 +71,7 @@ class YahooFeedReaderTest {
         assertTrue(items != null);
         assertTrue(items.size() == 1);
         assertTrue(items.get(0).title().equals("Test News"));
+        assertTrue(items.get(0).publicationDate().equals("Mon, 01 Jan 2024 00:00:00 GMT"));
     }
 
     @Test
