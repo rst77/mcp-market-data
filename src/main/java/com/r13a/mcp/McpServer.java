@@ -1,9 +1,8 @@
 package com.r13a.mcp;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.r13a.api.data.YahooFeedReaderSAX;
+import com.r13a.api.data.YahooFeedReader;
 import com.r13a.api.entity.NewsItem;
 
 import io.helidon.extensions.mcp.server.Mcp;
@@ -11,9 +10,13 @@ import io.helidon.extensions.mcp.server.McpException;
 import io.helidon.extensions.mcp.server.McpRole;
 import io.helidon.extensions.mcp.server.McpToolContent;
 import io.helidon.extensions.mcp.server.McpToolContents;
+import io.helidon.service.registry.Service.Inject;
 
 @Mcp.Server("mcp-market-data")
-class McpServer {
+public class McpServer {
+
+    @Inject
+    YahooFeedReader reader;
 
     @Mcp.Tool("Retrieve financial news related to the market for the specified tickers.")
     List<McpToolContent> getMarketData(@Mcp.Description("Company ticker symbol") String ticker) {
@@ -22,16 +25,19 @@ class McpServer {
             throw new McpException("Missing required argument ticker ID");
         }
 
-        YahooFeedReaderSAX reader = new YahooFeedReaderSAX();
-        List<McpToolContent> contents = new ArrayList<>();
-
         List<NewsItem> newsItems = reader.readFeed(ticker);
-        for (NewsItem item : newsItems) {
+        StringBuilder responseBuilder = new StringBuilder();
+        responseBuilder.append("Found ").append(newsItems.size()).append(" news items for ").append(ticker)
+                .append(":\n\n");
 
-            contents.add(McpToolContents.textContent(item.toString()));
+        for (NewsItem item : newsItems) {
+            responseBuilder.append("- **Title**: ").append(item.title()).append("\n");
+            responseBuilder.append("  **Link**: ").append(item.link()).append("\n");
+            responseBuilder.append("  **Date**: ").append(item.publicationDate()).append("\n");
+            responseBuilder.append("  **Description**: ").append(item.description()).append("\n\n");
         }
 
-        return contents;
+        return List.of(McpToolContents.textContent(responseBuilder.toString()));
     }
 
     @Mcp.Prompt("Prompt description")
