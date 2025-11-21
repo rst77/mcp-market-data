@@ -18,14 +18,41 @@ public class McpServer {
     @Inject
     YahooFeedReader reader;
 
-    @Mcp.Tool("Retrieve financial news related to the market for the specified tickers.")
-    List<McpToolContent> getMarketData(@Mcp.Description("Company ticker symbol") String ticker) {
+    @Mcp.Tool(value = "Retrieve financial news related to the market for the specified ticker.", title = "get_singl_market_data")
+    public List<McpToolContent> getSingleTickerMarketData(@Mcp.Description("Company ticker symbol") String ticker) {
 
         if (ticker.isEmpty()) {
             throw new McpException("Missing required argument ticker ID");
         }
 
         List<NewsItem> newsItems = reader.readFeed(ticker);
+        String response = formatNewsResponse(ticker, newsItems);
+
+        return List.of(McpToolContents.textContent(response));
+    }
+
+    @Mcp.Tool(value = "Retrieve financial news related to the market for the specified list of tickers.", title = "get_multiple_market_data")
+    public List<McpToolContent> getMultipleTickersMarketData(
+            @Mcp.Description("List of company tickers symbols") List<String> tickers) {
+
+        if (tickers == null || tickers.isEmpty()) {
+            throw new McpException("Missing required argument ticker ID");
+        }
+
+        StringBuilder fullResponse = new StringBuilder();
+        for (String ticker : tickers) {
+            if (ticker.isEmpty()) {
+                continue;
+            }
+
+            List<NewsItem> newsItems = reader.readFeed(ticker);
+            fullResponse.append(formatNewsResponse(ticker, newsItems));
+        }
+
+        return List.of(McpToolContents.textContent(fullResponse.toString()));
+    }
+
+    private String formatNewsResponse(String ticker, List<NewsItem> newsItems) {
         StringBuilder responseBuilder = new StringBuilder();
         responseBuilder.append("Found ").append(newsItems.size()).append(" news items for ").append(ticker)
                 .append(":\n\n");
@@ -36,8 +63,7 @@ public class McpServer {
             responseBuilder.append("  **Date**: ").append(item.publicationDate()).append("\n");
             responseBuilder.append("  **Description**: ").append(item.description()).append("\n\n");
         }
-
-        return List.of(McpToolContents.textContent(responseBuilder.toString()));
+        return responseBuilder.toString();
     }
 
     @Mcp.Prompt("Prompt description")
